@@ -48,16 +48,36 @@ for name in candidates.keys():
         election_winner=name
 
 # Display results on screen-----------------------------------------------------------------------------------------------
-print("Election Results")
-print("-------------------------------------------")
-print("Total Votes: " + str(ballot_count))
-print("-------------------------------------------")
+
+print("Election Results \n")
+print("-------------------------------------------\n")
+print("Total Votes: " + str(ballot_count) + "\n")
+print("-------------------------------------------\n")
 
 # Print out each unique candidate's name and their results
 for name in candidates.keys():
-    print(name + ": " + str(round(candidates[name]["Vote Percentage"]*100, 3)) + "% " + "(" + str(candidates[name]["Total Votes"]) + ")")
+    print(name + ": " + str(round(candidates[name]["Vote Percentage"]*100, 3)) + "% " + "(" + str(candidates[name]["Total Votes"]) + ")\n")
 
 # Declare the winner
-print("-------------------------------------------")
-print("Winner: " + election_winner)
-print("-------------------------------------------")
+print("-------------------------------------------\n")
+print("Winner: " + election_winner + "\n")
+print("-------------------------------------------\n")
+
+# File path to save results to a text file
+election_results=os.path.join('Analysis', 'election_results.txt')
+
+with open(election_results, 'w') as text_file:
+
+    text_file.write("Election Results \n")
+    text_file.write("-------------------------------------------\n")
+    text_file.write("Total Votes: " + str(ballot_count) + "\n")
+    text_file.write("-------------------------------------------\n")
+
+    # Print out each unique candidate's name and their results
+    for name in candidates.keys():
+        text_file.write(name + ": " + str(round(candidates[name]["Vote Percentage"]*100, 3)) + "% " + "(" + str(candidates[name]["Total Votes"]) + ")\n")
+
+    # Declare the winner
+    text_file.write("-------------------------------------------\n")
+    text_file.write("Winner: " + election_winner + "\n")
+    text_file.write("-------------------------------------------\n")
