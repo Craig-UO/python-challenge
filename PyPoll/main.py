@@ -11,13 +11,10 @@ current_candidate=""
 
 # Variables to hold counts of votes for each candidate and compute percentage
 vote_percentage_each=0
-vote_percentages=[]
 vote_total_each=0
-vote_totals=[]
 
 # List to hold the names of all unique candidates and count them
-candidates=[]
-unique_candidates=0
+candidates={}
 
 # Variable to count the total number of ballot IDs (votes) included in the data set
 ballot_count=0
@@ -36,46 +33,31 @@ with open(election_data) as csvfile:
 
         current_candidate=row[2]  # Store name of current line
 
-        if current_candidate not in candidates:  # Checks list of candidates for current name
-            candidates.append(current_candidate)  # Adds new unique names to the list
-            unique_candidates+=1
+        if current_candidate not in candidates.keys():  # Checks list of candidates for name in current row
+            # Adds new unique name to the Dictionary of names with a List for that candidate's vote total and vote percentage
+            candidates[current_candidate]={"Total Votes": 1, "Vote Percentage":1/ballot_count}
+        else:
+            candidates[current_candidate]["Total Votes"]+=1  # Adds one vote for each line with an existing candidate's name
+            
+            
+# Compute percentage results for each candidate and determine the winner of the election
+most_votes=0 # Placeholder variable to start checking each total against the others to determine the winner
+for name in candidates.keys():
+    candidates[name]["Vote Percentage"]=candidates[name]["Total Votes"]/ballot_count  # Copmutes this candidate's vote percentage
+    if candidates[name]["Total Votes"]>most_votes:
+        most_votes=candidates[name]["Total Votes"]
+        election_winner=name
 
-# Read in the file to count votes per unique candidate
-with open(election_data) as csvfile:
-    
-    vote_set = csv.reader(csvfile, delimiter=",")
+# Display results on screen-----------------------------------------------------------------------------------------------
+print("Election Results")
+print("-------------------------------------------")
+print("Total Votes: " + str(ballot_count))
+print("-------------------------------------------")
 
-    next(vote_set)
+# Print out each unique candidate's name and their results
+for name in candidates.keys():
+    print(name + ": " + str(round(candidates[name]["Vote Percentage"]*100, 3)) + "% " + "(" + str(candidates[name]["Total Votes"]) + ")")
 
-# Go through votes for each unique candidate and accumulate results
-for name in candidates:
-    # Read in the file to count votes per unique candidate
-    with open(election_data) as csvfile:
-    
-        vote_set = csv.reader(csvfile, delimiter=",")
-
-        next(vote_set)
-
-        print(name)
-        vote_total_each=0 #reset this value to start the count for the current loop
-
-        for row in vote_set:
-            #print(row[2])
-            if row[2]==name:
-                vote_total_each+=1  # Counts votes for this candidate
-
-        # Compute and add results for the current name to their lists
-        vote_percentage_each=vote_total_each/ballot_count
-        vote_percentages.append(vote_percentage_each)
-        vote_totals.append(vote_total_each)
-        print(vote_total_each)
-
-
-
-# Display results on screen
-print(ballot_count)
-print(candidates)
-print(unique_candidates)
-print(vote_percentages)
-print(vote_totals)
-
+print("-------------------------------------------")
+print("Winner: " + election_winner)
+print("-------------------------------------------")
