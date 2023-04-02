@@ -60,7 +60,20 @@ with open(budget_data) as csvfile:
 print("Financial Anlysis")
 print("---------------------------------------------")
 print(f"Total Months:", period_count)
-print("Total: $"+str(net_profit))
-print("Average Change: $"+str(round(change_running_average,2)))
+print("Total: $" + str(net_profit))
+print("Average Change: $" + str(round(change_running_average,2)))
 print("Greatest Increase in Profits: " + str(high_change_month) + " ($"+str(greatest_profit_increase)+")")
 print("Greatest Decrease in Profits: " + str(low_change_month) + " ($"+str(greatest_profit_decrease)+")")
+
+# Save results to a text file
+financial_analysis=os.path.join('Analysis', 'financial_analysis.txt')
+
+with open(financial_analysis, 'w') as text_file:
+
+    text_file.write("Financial Anlysis\n")
+    text_file.write("---------------------------------------------\n")
+    text_file.write("Total Months: " + str(period_count) + "\n")
+    text_file.write("Total: $" + str(net_profit) + "\n")
+    text_file.write("Average Change: $" + str(round(change_running_average,2)) + "\n")
+    text_file.write("Greatest Increase in Profits: " + str(high_change_month) + " ($"+str(greatest_profit_increase)+")\n")
+    text_file.write("Greatest Decrease in Profits: " + str(low_change_month) + " ($"+str(greatest_profit_decrease)+")\n")
