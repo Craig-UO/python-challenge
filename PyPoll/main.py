@@ -5,7 +5,6 @@ import csv
 # Sets a name for the file path to the data .csv file to be analyzed
 election_data=os.path.join('Resources', 'election_data.csv')
 
-#DEFINE VARIABLES HERE
 # Variable to hold the name of the candidate for the row currently under consideration
 current_candidate=""
 
@@ -28,23 +27,23 @@ with open(election_data) as csvfile:
 
     # Populate cadidates list with all unique names                
     for row in vote_set:
-        # Count the number of rows of data (votes), ignoring the header
+        # Count the number of rows of data (votes)
         ballot_count+=1
 
         current_candidate=row[2]  # Store name of current line
 
         if current_candidate not in candidates.keys():  # Checks list of candidates for name in current row
-            # Adds new unique name to the Dictionary of names with a List for that candidate's vote total and vote percentage
+            # Adds new unique name to the Dictionary of names with a Dictionary for that candidate's vote total and vote percentage
             candidates[current_candidate]={"Total Votes": 1, "Vote Percentage":1/ballot_count}
         else:
-            candidates[current_candidate]["Total Votes"]+=1  # Adds one vote for each line with an existing candidate's name
+            candidates[current_candidate]["Total Votes"]+=1  # Adds one vote for each line with this existing candidate's name
             
             
 # Compute percentage results for each candidate and determine the winner of the election
 most_votes=0 # Placeholder variable to start checking each total against the others to determine the winner
 for name in candidates.keys():
-    candidates[name]["Vote Percentage"]=candidates[name]["Total Votes"]/ballot_count  # Copmutes this candidate's vote percentage
-    if candidates[name]["Total Votes"]>most_votes:
+    candidates[name]["Vote Percentage"]=candidates[name]["Total Votes"]/ballot_count  # Computes this candidate's vote percentage
+    if candidates[name]["Total Votes"]>most_votes: # Sets this candidate as the winner if their vote total is currently the highest that's been looked at
         most_votes=candidates[name]["Total Votes"]
         election_winner=name
 
@@ -58,6 +57,7 @@ print("-------------------------------------------")
 for name in candidates.keys():
     print(name + ": " + str(round(candidates[name]["Vote Percentage"]*100, 3)) + "% " + "(" + str(candidates[name]["Total Votes"]) + ")")
 
+# Declare the winner
 print("-------------------------------------------")
 print("Winner: " + election_winner)
 print("-------------------------------------------")
